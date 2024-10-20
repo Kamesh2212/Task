@@ -1,0 +1,14 @@
+C:\Users\kames\Desktop\TaskManagement\Java\userServices\src\main\java\com\userServices\api\UsersApi.java
+C:\Users\kames\Desktop\TaskManagement\Java\userServices\src\main\java\com\userServices\controller\UserController.java
+C:\Users\kames\Desktop\TaskManagement\Java\userServices\src\main\java\com\userServices\DTO\UserDetails.java
+C:\Users\kames\Desktop\TaskManagement\Java\userServices\src\main\java\com\userServices\model\AccRegisterRequest.java
+C:\Users\kames\Desktop\TaskManagement\Java\userServices\src\main\java\com\userServices\model\AccRegisterResponse.java
+C:\Users\kames\Desktop\TaskManagement\Java\userServices\src\main\java\com\userServices\model\ErrorResponse.java
+C:\Users\kames\Desktop\TaskManagement\Java\userServices\src\main\java\com\userServices\model\InlineResponse200.java
+C:\Users\kames\Desktop\TaskManagement\Java\userServices\src\main\java\com\userServices\model\LoginRequest.java
+C:\Users\kames\Desktop\TaskManagement\Java\userServices\src\main\java\com\userServices\repo\RegisterRepo.java
+C:\Users\kames\Desktop\TaskManagement\Java\userServices\src\main\java\com\userServices\repo\UserRepo.java
+C:\Users\kames\Desktop\TaskManagement\Java\userServices\src\main\java\com\userServices\service\UserService.java
+C:\Users\kames\Desktop\TaskManagement\Java\userServices\src\main\java\com\userServices\UserServicesApplication.java
+C:\Users\kames\Desktop\TaskManagement\Java\userServices\src\main\java\com\userServices\utils\ErrorResponse.java
+C:\Users\kames\Desktop\TaskManagement\Java\userServices\src\main\java\com\userServices\utils\JwtUtil.java

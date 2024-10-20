@@ -1,0 +1,183 @@
+openapi: 3.0.0
+info:
+  title: User Service API
+  version: 1.0.0
+  description: API for user profile management, including user login, registration, and deletion.
+servers:
+  - url: https://api.example.com/user
+    description: User Service
+
+paths:
+  /users/login:
+    post:
+      summary: User login
+      tags:
+        - User Management
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/loginRequest'  
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+        '400':
+          description: Invalid username or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/{id}:
+    delete:
+      summary: Delete a user by ID
+      tags:
+        - User Management
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '204':
+          description: User deleted successfully
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/register:
+    post:
+      summary: User registration
+      tags:
+        - User Management
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccRegisterRequest'
+      responses:
+        '201':
+          description: Registration Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccRegisterResponse'
+        '400':
+          description: Invalid input or user already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    loginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "john_doe"
+        password:
+          type: string
+          example: "Password123!"
+      required:
+        - username
+        - password
+        
+    AccRegisterRequest:
+      type: object
+      properties:
+        firstname:
+          type: string
+          example: "John"
+        lastname:
+          type: string
+          example: "Doe"
+        username:
+          type: string
+          example: "john_doe"
+        email:
+          type: string
+          example: "john.doe@example.com"
+        password:
+          type: string
+          example: "Password123!"
+      required:
+        - username
+        - email
+        - password
+
+    AccRegisterResponse:
+      type: object
+      properties:
+        uid:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        firstname:
+          type: string
+          example: "John"
+        lastname:
+          type: string
+          example: "Doe"
+        username:
+          type: string
+          example: "john_doe"
+        email:
+          type: string
+          example: "john.doe@example.com"
+      required:
+        - uid
+        - username
+        - email
+
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-10-16T20:04:20"
+        message:
+          type: string
+          example: "Registration failed: Email or username already exists."
+        details:
+          type: string
+          example: "Email already in use."
