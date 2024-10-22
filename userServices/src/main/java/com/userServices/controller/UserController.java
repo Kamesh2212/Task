@@ -1,11 +1,10 @@
 package com.userServices.controller;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,18 +26,18 @@ public class UserController implements UsersApi {
 	@Override
 	@RequestMapping("/users/login")
 	public ResponseEntity loginUser(LoginRequest body) {
-		return new ResponseEntity<Object>(userService.loginServ(body), HttpStatus.OK);
+		Object LoginResponse = userService.loginServ(body);
+		 if (LoginResponse instanceof ErrorResponse) {
+			 ErrorResponse errorResponse = (ErrorResponse) LoginResponse;
+	            return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+		 }else {
+				return new ResponseEntity<Object>(LoginResponse, HttpStatus.OK);
+		 }
 	}
 
 	@Override
 	@RequestMapping("/users/register")
 	public ResponseEntity registerUser(AccRegisterRequest body) {
-		System.out.println("******************"+body.getEmail());
-		System.out.println("******************"+body.getFirstname());
-		System.out.println("******************"+body.getLastname());
-		System.out.println("******************"+body.getPassword());
-		System.out.println("******************"+body.getUsername());
-
 		
         Object serviceResponse = userService.regService(body);
 
@@ -51,12 +50,20 @@ public class UserController implements UsersApi {
         }
     }
 	
-	
+	@Transactional
 	@Override
-	@RequestMapping("/users/{id}")
-	public ResponseEntity<Void> deleteUser(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+	@RequestMapping("/users/deleteByEmail")
+	public ResponseEntity deleteUserByEmail(String email) {
+		System.out.println("_____________________"+email);
+		HttpStatus status = userService.deleteAcc(email);
+		if(status.equals(HttpStatus.OK)) {
+			 return new ResponseEntity<>( HttpStatus.OK);
+		}
+		else {
+			 return new ResponseEntity<>( HttpStatus.CONFLICT);
+
+		}
+		
 	}
 
 }

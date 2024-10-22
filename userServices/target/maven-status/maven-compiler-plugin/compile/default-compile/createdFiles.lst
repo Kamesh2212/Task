@@ -1,6 +1,5 @@
 com\userServices\utils\ErrorResponse.class
-com\userServices\repo\UserRepo.class
-com\userServices\service\UserService.class
+com\userServices\WebConfig.class
 com\userServices\utils\JwtUtil.class
 com\userServices\repo\RegisterRepo.class
 com\userServices\UserServicesApplication.class

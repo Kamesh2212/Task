@@ -10,7 +10,6 @@ import com.userServices.model.AccRegisterResponse;
 import com.userServices.model.ErrorResponse;
 import com.userServices.model.InlineResponse200;
 import com.userServices.model.LoginRequest;
-import java.util.UUID;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -37,21 +36,21 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-10-18T00:56:13.926560+01:00[Europe/London]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-10-22T23:05:52.416739600+01:00[Europe/London]")
 @Validated
 public interface UsersApi {
 
-    @Operation(summary = "Delete a user by ID", description = "", tags={ "User Management" })
+    @Operation(summary = "Delete a user by email", description = "", tags={ "User Management" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "204", description = "User deleted successfully"),
         
         @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
         
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))) })
-    @RequestMapping(value = "/users/{id}",
+    @RequestMapping(value = "/users/deleteByEmail",
         produces = { "application/json" }, 
         method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteUser(@Parameter(in = ParameterIn.PATH, description = "", required=true, schema=@Schema()) @PathVariable("id") UUID id);
+    ResponseEntity<Void> deleteUserByEmail(@NotNull @Parameter(in = ParameterIn.QUERY, description = "" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "email", required = true) String email);
 
 
     @Operation(summary = "User login", description = "", tags={ "User Management" })

@@ -26,32 +26,33 @@ public class UserService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public InlineResponse200 loginServ(LoginRequest body) {
+    public Object loginServ(LoginRequest body) {
     	
     	UserDetails u =new UserDetails();
     	u.setEmail(body.getEmail());
     	u.setPassword(body.getPassword());
     	
-        Optional<UserDetails> userDetailsOpt = repo.findByEmail(u.getEmail());
-        
-        
-        if (userDetailsOpt.isPresent()) {
-            UserDetails userDetails = userDetailsOpt.get();
+      UserDetails userDetailsOpt = repo.findByEmail(u.getEmail());
+  
+
+        if (userDetailsOpt != null) {
             
-            if (passwordMatches(body.getPassword(), userDetails.getPassword())) {
-            	String token = jwtUtil.generateToken(userDetails.getEmail());
+            if (passwordMatches(body.getPassword(), userDetailsOpt.getPassword())) {
+            	String token = jwtUtil.generateToken(userDetailsOpt.getEmail());
             	InlineResponse200 response = new InlineResponse200(); 
             	System.out.println("********"+token);
             	response.setToken(token);
                 return response; 
             }
         }
+        else {
+            return new ErrorResponse(HttpStatus.NOT_FOUND, "Please sign up with email first");
+        }
         
         return new InlineResponse200(); // Adjust return type as needed
     }
 
     private boolean passwordMatches(String rawPassword, String storedPassword) {
-        // Implement your password matching logic here (e.g., using BCrypt)
         return rawPassword.equals(storedPassword); // This is just an example; use proper hashing
     }
     
@@ -59,11 +60,9 @@ public class UserService {
         UserDetails user = new UserDetails(reg);
 
         try {
-            // Attempt to save the UserDetails entity
             UserDetails savedUser = repo.save(user);
 
             if (savedUser != null) {
-                // Construct the response for successful registration
                 AccRegisterResponse response = new AccRegisterResponse();
                 response.setUid(savedUser.getUid());
                 response.setFirstname(reg.getFirstname());
@@ -71,18 +70,32 @@ public class UserService {
                 response.setEmail(reg.getEmail());
                 response.setUsername(reg.getUsername());
 
-                // Return response object on success
                 return response;
             } else {
-                // This branch should not generally be reached if save() is successful
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to save user details.");
             }
         } catch (DataIntegrityViolationException e) {
-            // Handle unique constraint violation (e.g., duplicate email)
-            return new ErrorResponse(HttpStatus.CONFLICT, "Registration failed", "A user with this email or username already exists. Please use a different one.");
+            return new ErrorResponse(HttpStatus.CONFLICT, "A user with this email or username already exists. Please use a different one.");
         } catch (Exception e) {
-            // Handle any other exceptions
-            return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Registration failed", "An unexpected error occurred. Please try again later.");
+            return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,  "An unexpected error occurred. Please try again later.");
         }
     }
+    
+	public HttpStatus deleteAcc(String email) {
+
+		UserDetails userDetails = repo.findByEmail(email);
+		if (userDetails != null) {
+			repo.deleteByEmail(email);
+			UserDetails u = repo.findByEmail(userDetails.getEmail());
+			if (u == null) {
+				return HttpStatus.OK;
+			} else {
+				return HttpStatus.CONFLICT;
+			}
+		} else {
+			return HttpStatus.NOT_FOUND;
+		}
+
+	}
+    
 }

@@ -10,7 +10,7 @@ public class RegisterRepo{
 	 public  RegisterRepo(JdbcTemplate jdbcTemplate) {
 	        this.jdbcTemplate = jdbcTemplate;
 	    }
-	 
+//	 
 //	  public int save(RegisterAccRegisterRequest bdy,UUID uid) {
 //		  
 //		  int result = jdbcTemplate.update("INSERT INTO userDetails(uid, username, firstname, lastname, email,password,created_at) VALUES (?, ?, ?, ?, ?, ?,?)",
